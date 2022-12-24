@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Import a CSV</title>
+    <style>
+        .import{
+            padding: 50px;
+            margin: 150px auto;
+            max-width: 1200px;
+            font-size: 18px;
+        }
+        .big-heading{
+            margin-bottom: 25px;
+        }
+        .btn{
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <section class="import">
+        <h1 class="big-heading">Import a CSV</h1>
+        <p>If you have an exported CSV file created in Minikan, you can import it here 
+            and all your lists and cards will magically appear on the dashboard!
+        </p>
+        <img src="../static/images/upload.webp" width="700px" alt="">
+        <div>
+            <form action = "" method = "post" enctype = "multipart/form-data">
+                <label for="file-upload">Select a CSV file to upload: </label>
+                <input type = "file" name = "file" />
+                <input class="btn" type = "submit" value = "Upload File" accept=".csv" />
+            </form>
+        </div>
+    </section>
+</body>
+</html>

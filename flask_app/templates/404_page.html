@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Something isn't right</title>
+    <style>
+        .error-section{
+            text-align: center;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav id="navbar">
+            <h1><a href="/">MiniKan</a></h1>
+            <ul>
+                <li><a href="/register">Register</a></li>
+                <li><a href="/login">Log In</a></li>
+                <li><a href="/about">Help & About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="error-section">
+        <img src="/static/images/error_pg.png" alt="" width="1100px">
+        <h1 style="font-size: 100px; margin-bottom: 80px;">404</h1>
+        <h1 class="big-heading">Something...isn't quite right.</h1>
+        <p style="margin: 50px 0; font-size: 27px;">Looks Like this page does not exist!</p>
+        <a href="/" class="btn">Go Home?</a>
+    </section>    
+</body>
+</html>

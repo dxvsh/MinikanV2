@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='vue.js') }}"></script>
+    <style>
+        #main-form{
+            margin: 150px auto;
+        }
+
+        #main-form label {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        #main-form input {
+            padding: 20px;
+        }
+    </style>
+    <title>Create a New List</title>
+</head>
+<body>
+    <div id="app">
+        <section id="main-form">
+            <h1 class="big-heading">Create a New List</h1>
+            <form @submit="create_list">
+                <div class="form-group">
+                    <label for="list_title">Enter a name for your List: </label>
+                    <input type="text" id="list_title" name="list_title" v-model="list_title" placeholder="Give your list a short and concise name" required>
+                </div>
+                <button class="btn" type="submit">Create List</button>
+            </form>
+        </section>
+    </div>
+</body>
+<script>
+    const app = new Vue({
+        el : '#app',
+        data : {
+            list_title : ''
+        },
+        methods : {
+            create_list(e){
+                e.preventDefault()
+                
+                fetch("http://127.0.0.1:5000/api/users/{{user['username']}}/lists", {
+                    method : 'POST',
+                    headers : {
+                        'Content-Type' : 'application/json'
+                    },
+                    body : JSON.stringify({"list_title" : this.list_title})
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    // after successful list creation, redirect the user to their dashboard
+                    window.location.href = "http://127.0.0.1:5000/{{user['username']}}/dashboard"
+                })
+            }
+        }
+    })
+</script>
+</html>

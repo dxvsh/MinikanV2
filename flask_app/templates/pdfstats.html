@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <style>
+        .boards-container {
+            grid-auto-columns: 350px;
+            margin: 30px auto;
+            grid-auto-columns: max-content;
+            grid-auto-flow: row;
+            max-width: max-content;
+            grid-auto-rows: max-content;
+        }
+        .boards-container__board__cardcontent li{
+            list-style:none;
+            margin: 7px 0;
+            font-size: 18px;
+        }
+    </style>
+    <title>Quick Stats</title>
+</head>
+<body>
+    <div style="text-align: center; font-size: 18px; margin: 20px; line-height: 1.7;">
+        <h1>Hi, {{ username }}! Here's your monthly stats report!</h1>
+        <h2>Keep working regularly on your tasks to avoid missing the deadlines!</h2>
+        <p style="font-size: 20px;">Report generated on : {{ creation_time }}</p>
+    </div>
+
+    <div class="boards-container">
+        <h2 style="margin-bottom: 10px;">These are the stats for your lists: </h2>
+        {% for list in lists %}
+            <div class="boards-container__board">         
+                <div class="boards-container__board__card">
+                    <div class="boards-container__board__cardhead">
+                        <h1>Stats for: {{ list["list_title"] }}</h1>
+                    </div>
+
+                    <div class="boards-container__board__cardcontent">
+                        <p>
+                            <ul>
+                                <li><i class="fas fa-stream"></i> Total Cards : {{ list["total_cards"] }} </li>
+                                <li><i class="fas fa-check-circle"></i> Completed Cards : {{ list["completed_cards"] }}</li>
+                                <li><i class="fas fa-clock"></i> Pending Cards : {{ list["pending_cards"] }} </li>
+                                <li><i class="fas fa-exclamation-triangle"></i> Deadlines Missed : {{ list["deadlines_missed"] }}</li>
+                                <img src="{{ cwd_path }}/flask_app/static/images/list_{{ list['list_id'] }}.jpeg" alt="" width="350px">
+                            </ul>
+                        </p>
+                    </div>
+
+                    <div class="boards-container__board__cardfoot">
+                        {% if list["total_cards"] != 0 %}
+                            <!-- Percentage of task completed: (completed_cards/total_num_of_cards)*100 -->
+                            <p><i class="fas fa-chart-line"></i>Completion: {{ (list["completed_cards"]/list["total_cards"]*100)|round(2) }}%</p>
+                        {% else %}
+                            <p><i class="fas fa-chart-line"></i>Completion: Empty List</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <h3>This is an automated report that is sent out every month for users to track their progress.</h3>
+      </div>
+</body>
+</html>

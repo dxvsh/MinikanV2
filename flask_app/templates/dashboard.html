@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='font_awesome.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='vue.js') }}"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <nav id="navbar">
+                <h1><a v-bind:href="dashboard_url">Welcome [[username]],</a></h1>
+                <h1 style="font-size: 20px;"><a v-bind:href="createlist_url">+ Create a New List</a></h1>
+                <ul>
+                    <li><a v-bind:href="stats_url">Quick Stats</a></li>
+                    <li><a v-bind:href="import_url">Import CSV</a></li>
+                    <li><a v-bind:href="export_url">Export as CSV</a></li>
+                    <li><a href="/about">Help & About</a></li>
+                    <li><a href="/logout">Log Out</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div v-if="lists.length == 0" class="img-section">
+            <img src="../static/images/kan_dashboard.jpg" alt="">
+            <p>You don't have any lists [[ username ]]. Create a new one!</p>
+            <a v-bind:href="createlist_url" class="btn">Create a List!</a>
+        </div>
+
+        <div v-else class="boards-container">
+                <div v-for="list in lists" :key="list.list_id" class="boards-container__board">
+                    <div class="boards-container__boardhead">
+                        <h1>[[ list.list_title ]]</h1>
+                        <ul>
+                            <li><a v-bind:href="'/' + username + /export-list/ + list.list_id" title="export list"><i class="fas fa-download"></i></a></li>
+                            <li><a v-bind:href="'/' + username + /edit-list/ + list.list_id" title="edit list"><i class="fas fa-edit"></i></a></li>
+                            <li><a href="#" title="delete list" @click="del_list(list.list_id)"><i class="far fa-trash-alt"></i></a></li>
+                        </ul>
+                    </div>
+                
+                    <div v-for="card in list.cards" :key="card.card_id"  class="boards-container__board__card">
+                        <div class="boards-container__board__cardhead">
+                            <h1>[[ card.card_title ]]</h1>
+                            <ul>
+                                <li><a v-bind:href="'/' + username + /edit-card/ + card.card_id + /inside-list/ + list.list_id" title="edit card"><i class="fas fa-edit"></i></a></li>
+                                <li><a href="#" title="delete card" @click="del_card(list.list_id, card.card_id)"><i class="far fa-trash-alt"></i></a></li>
+                            </ul>
+                        </div>
+                        <div v-if="card.status == 'Pending'" class="boards-container__board__cardcontent">
+                            <p>
+                                [[ card.card_content ]]
+                            </p>
+                        </div>
+                        <div v-else class="boards-container__board__cardcontent completed">
+                            <p>
+                                [[ card.card_content ]]
+                            </p>
+                        </div>
+                        <div class="boards-container__board__cardfoot">
+                                <p v-if="card.status == 'Pending'">Due on : <i class="fas fa-calendar-week"></i>[[ card.deadline.substring(0,16) ]]</p>
+                                <p v-else>Task Completed</p>
+                        </div>
+                    </div>
+                    <div class="add-card-link">
+                        <a v-bind:href="'/'+ username + '/create-card/inside-list/' + list.list_id">+ Add new card</a>
+                    </div>
+                </div>
+        </div>
+    </div>
+</body>
+<script>
+
+    const app = new Vue({
+        el : '#app',
+        data : {
+            username : '',
+            lists : [],
+        },
+        created() {
+            fetch("http://127.0.0.1:5000/api/users/{{user['username']}}/lists")
+            .then(res => res.json())
+            .then(data => {
+                this.username = data.username;
+                this.lists = data.lists;
+            })
+        },
+        methods : {
+            del_list(list_id){
+                let ans = confirm("Are you sure you want to delete this list? All the cards inside will be deleted!")
+                // if ans is true, send a DELETE request to our api for deleting this list.
+                if(ans){
+                    fetch(`http://127.0.0.1:5000/api/users/${this.username}/lists/${list_id}`, {
+                        method : 'DELETE'
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        location.reload(); // refresh the page after list deletion to update the view
+                    })
+                }
+            },
+            del_card(list_id, card_id){
+                let ans = confirm("Are you sure you want to delete this card?")
+                // if ans is true, send a DELETE request to our api for deleting the card.
+                if(ans){
+                    fetch(`http://127.0.0.1:5000/api/users/${this.username}/lists/${list_id}/cards/${card_id}`, {
+                        method : 'DELETE'
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        location.reload(); // refresh the page after card deletion to update the view
+                    })
+                }
+            }
+        },
+        computed : {
+            dashboard_url(){
+                return `/${this.username}/dashboard`
+            },
+            createlist_url(){
+                return `/${this.username}/create-list`
+            },
+            stats_url(){
+                return `/${this.username}/stats`
+            },
+            import_url(){
+                return `/${this.username}/import`
+            },
+            export_url(){
+                return `/${this.username}/export`
+            }
+        },
+        delimiters: ['[[', ']]']
+
+    })
+
+</script>
+</html>

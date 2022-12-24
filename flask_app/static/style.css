@@ -1,0 +1,316 @@
+/* CSS Reset the margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Main Styling for the body*/
+html, body{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    line-height: 1.5em;
+    background-color: #d4efff;
+}
+
+/* Util Classes */
+.clr {
+    /* clear the floats */
+    clear: both;
+}
+
+img{
+    display: block;
+    margin: auto;
+    /* margin: auto only works on block level elements so, I need to make image block level */
+}
+
+a {
+    text-decoration: none;
+    text-align: center;
+}
+
+.big-heading {
+    /* a class to increase the font size of an element */
+    font-size: 50px;
+}
+
+.btn {
+    display: block;
+    width: 155px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #163C6B;
+    padding: 13px 20px;
+    margin: 20px auto;
+    cursor: pointer;
+    border: none;
+}
+
+.btn:hover{
+    /* hover behavior for buttons */
+    background-color: #113055;
+    color: aquamarine;
+}
+
+/* a class for styling anchor tags */
+.link-style a{
+    color: #13355d;
+    font-weight: 900;
+}
+
+.link-style a:hover{
+    background-color: #1C4C86;
+    color: #fff;
+}
+
+.img-section {
+    margin: 140px 0;
+}
+
+.img-section p{
+    font-size: 20px;
+    text-align: center;
+    margin: 20px;
+    font-weight:500;
+}
+
+/**********************************************************************************************/
+
+/* Navbar Styling */
+#navbar {
+    background-color: #1C4C86;
+    color: #fff;
+    overflow: auto;
+}
+
+#navbar a {
+    display: block;
+    color: #fff;
+    padding: 18px;
+    /* for the padding to apply on top and bottom sides, the element needs to be block level */
+}
+
+#navbar a:hover{
+    background-color: #163C6B;
+    color: aquamarine;
+}
+
+#navbar h1{
+    float: left;
+    font-weight: 200;
+}
+
+#navbar ul{
+    list-style: none;
+    float: right;
+}
+
+#navbar ul li{
+    float: left;
+}
+
+/* Feature Section Styling */
+#features {
+    max-width: 1100px;
+    padding: 35px;
+    margin: auto;
+}
+
+#features h1{
+    text-align: center;
+    margin: 30px 0;
+}
+
+#features p{
+    max-width: 780px;
+    text-align: center;
+    margin: 20px auto;
+    font-size: 18px;
+}
+
+/* Main Form Styling */
+#main-form {
+    padding: 50px;
+    max-width: 1200px;
+    margin: 150px auto;
+}
+
+#main-form h1 {
+    font-weight: 900;
+    margin-bottom: 40px;
+}
+
+#main-form .form-group {
+    margin-bottom: 20px;
+}
+
+#main-form label{
+    display: block;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+#main-form input{
+    width: 100%;
+    padding: 10px; /*increasing the padding makes the input field thicker*/
+    border: none;
+    border-radius: 5px;
+    background-color: #edf7fc;
+}
+
+#main-form textarea{
+    width: 100%;
+    background-color: #edf7fc;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+#main-form button{
+    margin: 30px 0;
+}
+
+#main-form .error{
+    color: white;
+    background: tomato;
+    width: fit-content;
+    padding: 0 5px;
+    margin-top: 7px;
+}
+
+/* About Styling */
+#about {
+    max-width: 1000px;
+    padding: 50px;
+    margin: auto;
+}
+
+#about p{
+    padding: 25px 0;
+    font-size: 17px;
+}
+
+#about .list ul{
+    padding: 20px 30px;
+}
+
+#about .list ul li{
+    padding-bottom: 6px;
+}
+
+/* Footer Styling */
+footer {
+    background-color: #1C4C86;
+    color: #fff;
+    text-align: center;
+    padding: 8px;
+    margin-top: 40px;
+    width: 100%;
+}
+
+/******************************************************************************************/
+/* Main Dashboard Styling using CSS Grid */
+
+.boards-container {
+    /* the overall class for boards */
+    margin: 10px;
+    display: grid;
+    grid-auto-columns: 290px;
+    grid-auto-flow: column;
+    grid-gap: 10px;
+    /* height: 100vh; */
+    overflow: auto;
+}
+
+.boards-container__board {
+    /* class for styling each individual board */
+    background: #f4fffd;
+    border-radius: 3px;
+    display: grid;
+    grid-auto-rows: max-content;
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.boards-container__boardhead {
+    /* title/heading for each board */
+    background-color:rgb(83, 255, 189);
+    padding: 8px;
+    border-radius: 3px;
+    /* border: 1px solid blue; */
+}
+
+.boards-container__boardhead h1,
+.boards-container__board__cardhead h1{
+    font-size: 17px;
+    float: left;
+}
+
+.boards-container__boardhead ul,
+.boards-container__board__cardhead ul{
+    list-style: none;
+    float: right;
+}
+
+.boards-container__boardhead ul li,
+.boards-container__board__cardhead ul li{
+    float: left;
+}
+
+.boards-container__boardhead ul li a,
+.boards-container__board__cardhead ul li a{
+    padding: 0 4px;
+    color: midnightblue;
+}
+
+.boards-container__board__cardhead {
+    /* title/heading for a card */
+    background-color: #e9e3ff;
+    padding: 5px;
+    border-radius: 3px;
+    overflow: auto;
+}
+
+.boards-container__board__cardcontent{
+    /* styling for the card content */
+    padding: 15px 10px;
+    background-color: ghostwhite;
+}
+
+.completed{
+    /* styling for a completed card */
+    text-decoration: line-through;
+    opacity: 0.7;
+    background: lightyellow;
+}
+
+.boards-container__board__card {
+    /* styling for each individual card */
+    background: #fff;
+    box-shadow: 0 2px 0 rgba(9,30,66,.25);
+    border-radius: 3px;
+    /* padding: 8px; */
+}
+
+.boards-container__board__cardfoot {
+    font-size: 14px;
+    padding: 1px 10px;
+    background: rgb(255, 197, 206);
+    border-radius: 3px;
+}
+
+.boards-container__board__cardfoot i{
+    padding: 4px;
+}
+
+.add-card-link a{
+    /* Styling for the "add new card button at the bottom" */
+    color: #474747;
+    text-decoration: none;
+}
+
+.add-card-link a:hover{
+    color: #141414;
+}

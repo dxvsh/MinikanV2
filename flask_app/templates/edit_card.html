@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='vue.js') }}"></script>
+    <title>Edit your card</title>
+    <style>
+        #main-form{
+            margin: 100px auto;
+        }
+
+        #main-form label {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        #main-form input {
+            padding: 20px;
+        }
+
+        #main-form .form-group-radio,
+        #main-form .form-group-select{
+            margin-bottom: 25px;
+        }
+        #main-form .form-group-radio input{
+            width: 3%;
+        }
+
+        #main-form .form-group-radio label,
+        #main-form .form-group-select label{
+            display: inline;
+        }
+
+        #main-form .form-group-select #list_id {
+            padding: 4px;
+            background-color: aquamarine;
+            border: 2px solid navy;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <section id="main-form">
+            <h1 class="big-heading">Edit Your Card</h1>
+            <form @submit="edit_card">
+                <div class="form-group">
+                    <label for="card_title">Card Title:</label>
+                    <input type="text" id="card_title" name="card_title" v-model="card_title" required>
+                </div>
+                <div class="form-group">
+                    <label for="deadline">Due On:</label>
+                    <input type="date" id="deadline" name="deadline" v-model="deadline" required>
+                </div>
+                <div class="form-group-radio">
+                    <label for="status">Completion Status:</label>
+                    <input type="radio" name="status" id="status" value="Pending" v-model="status">
+                    <label>Pending</label>
+                    <input type="radio" name="status" id="status" value="Completed" v-model="status">
+                    <label>Completed</label>
+                </div>
+                <div class="form-group-select">
+                    <label for="list_id">Choose a list for your card:</label>
+                    <select name="list_id" id="list_id" v-model="list_id">
+                        <!-- loop over all the lists to create the dropdown options -->
+                        <option v-for="list in lists" v-bind:value="list.list_id">[[ list.list_title ]]</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="card_content">Card Content:</label>
+                    <textarea name="card_content" id="card_content" v-model="card_content" rows="10">[[ card_content ]]</textarea>
+                </div>
+                <button type="submit" class="btn">Edit Card</button>
+            </form>
+        </section>
+    </div>
+</body>
+<script>
+    const app = new Vue({
+        el : '#app',
+        data : {
+            card_id : 0,
+            card_content : '',
+            card_title : '',
+            status : '',
+            deadline : '',
+            list_id : 0,
+            lists : []
+        },
+        created(){
+            // fetch all the data about this card
+            fetch("http://127.0.0.1:5000/api/users/{{user['username']}}/lists/{{list_id}}/cards/{{card_id}}")
+            .then(res => res.json())
+            .then(data => {
+                this.card_id = data.card_info.card_id,
+                this.card_content = data.card_info.card_content,
+                this.card_title = data.card_info.card_title,
+                this.deadline = this.format_date(data.card_info.deadline),
+                this.list_id = data.card_info.list_id,
+                this.status = data.card_info.status
+            })
+
+            // fetch some minimal data about all the lists of this user from our api
+            fetch("http://127.0.0.1:5000/api/users/{{user['username']}}/lists_min")
+            .then(res => res.json())
+            .then(data => {
+                this.lists = data.lists
+            })
+        },
+        methods : {
+            format_date(dateString){
+                // I need to convert the date that we recieve from the api into a format that our html form can work with.
+                // the date string returned by the api looks something like : Wed, 09 Mar 2022 00:00:00 GMT
+                // I want to convert into a format like YYYY-MM-DD, eg: 2022-03-09
+
+                temp = new Date(dateString); // construct a Date object out of this string
+                d = temp.getDate(); // getDate() extracts the day from this date (can be between 1-31)
+                m = temp.getMonth() + 1; // getMonth() extracts month from date (can be between 0-11, hence the +1)
+                y = temp.getFullYear(); // extracts the year out of the date 
+
+                // construct the formatted date string, note that we need to insert 0 at front if the day or month is 9 or less
+                fmted = y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+                return fmted;
+            },
+
+            edit_card(e){
+                e.preventDefault()
+
+                fetch("http://127.0.0.1:5000/api/users/{{user['username']}}/lists/{{list_id}}/cards/{{card_id}}", {
+                    method : 'PUT',
+                    headers : {
+                        'Content-Type' : 'application/json'
+                    },
+                    body : JSON.stringify({"card_title" : this.card_title, "card_content" : this.card_content, "status" : this.status, 
+                                        "deadline" : this.deadline, "list_id" : this.list_id})
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    // card edit was successful so redirect the user back to the dashboard
+                    window.location.href = "http://127.0.0.1:5000/{{user['username']}}/dashboard"
+                })
+            }
+
+        },
+        delimiters: ['[[', ']]']
+    })
+</script>
+</html>

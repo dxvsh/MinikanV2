@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='font_awesome.css') }}"/>
+    <script src="{{ url_for('static', filename='vue.js') }}"></script>
+    <style>
+        .boards-container {
+            grid-auto-columns: 350px;
+        }
+        .boards-container__board__cardcontent li{
+            list-style:none;
+            margin: 7px 0;
+        }
+    </style>
+    <title>Quick Stats</title>
+</head>
+<body>
+
+    <div id="app">
+        <header>
+            <nav id="navbar">
+                <h1><a v-bind:href="dashboard_url">Welcome [[ username ]],</a></h1>
+                <h1 style="font-size: 20px;"><a v-bind:href="createlist_url">+ Create a New List</a></h1>
+                <ul>
+                    <li><a v-bind:href="stats_url">Quick Stats</a></li>
+                    <li><a v-bind:href="export_url">Export as CSV</a></li>
+                    <li><a v-bind:href="import_url">Import CSV</a></li>
+                    <li><a href="/about">Help & About</a></li>
+                    <li><a href="/logout">Log Out</a></li>
+                </ul>
+            </nav>
+        </header>
+    
+        <div class="boards-container">
+            <!-- stats will be only generated for lists that have cards in them, not for empty lists -->
+                <div v-for="list in stats" v-if="list.total_cards != 0" :key="list.list_id" class="boards-container__board">
+                    <div class="boards-container__boardhead">
+                        <h1>[[ list.list_title ]]</h1>
+                    </div>
+                
+                    <div class="boards-container__board__card">
+                        <div class="boards-container__board__cardhead">
+                            <h1>Stats for: [[ list.list_title ]]</h1>
+                        </div>
+    
+                        <div class="boards-container__board__cardcontent">
+                            <p>
+                                <ul>
+                                    <li><i class="fas fa-stream"></i> Total Cards : [[ list.total_cards ]] </li>
+                                    <li><i class="fas fa-check-circle"></i> Completed Cards : [[ list.completed_cards ]]</li>
+                                    <li><i class="fas fa-clock"></i> Pending Cards : [[ list.pending_cards ]] </li>
+                                    <li><i class="fas fa-exclamation-triangle"></i> Deadlines Missed : [[ list.deadlines_missed ]]</li>
+
+                                    <!-- each image has the name : list_<id>.jpeg -->
+                                    <!-- we want to construct the image path as above, so we use concatenation like this: -->
+                                    <img v-bind:src="'../static/images/' + 'list_' + list.list_id + '.jpeg'" alt="" width="310px">
+                                </ul>
+                            </p>
+                        </div>
+    
+                        <div class="boards-container__board__cardfoot">
+                                <!-- Percentage of task completed: (completed_cards/total_num_of_cards)*100 -->
+                                <p v-if="list.total_cards != 0">
+                                    <i class="fas fa-chart-line"></i>
+                                    Completion: [[ ((list.completed_cards/list.total_cards)*100).toFixed(2) ]]%
+                                </p>
+                                <p v-else><i class="fas fa-chart-line"></i>Completion: Empty List</p>
+                        </div>
+                    </div>
+                </div>
+          </div>
+    </div>
+</body>
+<script>
+    const app = new Vue({
+        el : '#app',
+        data : {
+            username : '',
+            stats : [],
+        },
+        created() {
+            // making this api calls will freshly generate all the pie charts and return the stats data for lists in json
+            fetch("http://127.0.0.1:5000/api/users/{{user['username']}}/stats")
+            .then(res => res.json())
+            .then(data => {
+                this.username = data.username;
+                this.stats = data.stats;
+            })
+        },
+        methods : {
+    
+        },
+        computed : {
+            dashboard_url(){
+                return `/${this.username}/dashboard`
+            },
+            createlist_url(){
+                return `/${this.username}/create-list`
+            },
+            stats_url(){
+                return `/${this.username}/stats`
+            },
+            import_url(){
+                return `/${this.username}/import`
+            },
+            export_url(){
+                return `/${this.username}/export`
+            }
+        },
+        delimiters: ['[[', ']]']
+    })
+</script>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='vue.js') }}"></script>
+    <title>Create a new card</title>
+    <style>
+        #main-form{
+            margin: 100px auto;
+        }
+
+        #main-form label {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        #main-form input {
+            padding: 20px;
+        }
+
+        #main-form .form-group-radio{
+            margin-bottom: 25px;
+        }
+        #main-form .form-group-radio input{
+            width: 3%;
+        }
+
+        #main-form .form-group-radio label{
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <section id="main-form">
+            <h1 class="big-heading">Create a New Card</h1>
+            <form @submit="create_card">
+                <div class="form-group">
+                    <label for="card_title">Card Title:</label>
+                    <input type="text" id="card_title" name="card_title" v-model="card_title" placeholder="Give your card a short and simple name" required>
+                </div>
+                <div class="form-group">
+                    <label for="deadline">Due On: </label>
+                    <input type="date" id="deadline" name="deadline" v-model="deadline" required>
+                </div>
+                <div class="form-group-radio">
+                    <label for="status">Completion Status: </label>
+                    <input type="radio" name="status" id="status" value="Pending" v-model="status">
+                    <label>Pending</label>
+                    <input type="radio" name="status" id="status" value="Completed" v-model="status">
+                    <label>Completed</label>
+                </div>
+                <div class="form-group">
+                    <label for="card_content">Card Content:</label>
+                    <textarea name="card_content" id="card_content" v-model="card_content" rows="10" placeholder="Enter your card's content here"></textarea>
+                </div>
+                <button class="btn" type="submit">Create Card</button>
+            </form>
+        </section>
+    </div>
+
+</body>
+<script>
+    const app = new Vue({
+        el : '#app',
+        data : {
+            card_title : '',
+            deadline : '',
+            status : 'Pending', // by default, the 'Pending' radio button should be checked
+            card_content : ''
+        },
+        methods : {
+            create_card(e){
+                e.preventDefault() // prevent the default form submit behavior and instead send a post request to our api endpoint for creating a card
+
+                fetch("http://127.0.0.1:5000/api/users/{{user['username']}}/lists/{{list_id}}/cards", {
+                    method : 'POST',
+                    headers : {
+                        'Content-Type' : 'application/json'
+                    },
+                    body : JSON.stringify({"card_title" : this.card_title, "deadline" : this.deadline, "status" : this.status, "card_content" : this.card_content})
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    // card creation was successful so redirect the user back to dashboard.
+                    window.location.href = "http://127.0.0.1:5000/{{user['username']}}/dashboard"
+                })
+            }
+        }
+    })
+</script>
+</html>

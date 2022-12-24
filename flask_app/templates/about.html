@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & About</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav id="navbar">
+            <h1><a href="/">MiniKan</a></h1>
+            <ul>
+                <li><a href="/register">Register</a></li>
+                <li><a href="/login">Log In</a></li>
+                <li><a href="/about">Help & About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="about">
+        <h1 class="big-heading">What is Kanban?</h1>
+        <p>A kanban board is a visual way to manage tasks and workflows, which utilizes a physical or a digital board with 
+            columns and cards. The kanban cards represent tasks, and the columns organize those tasks by their progress or current stage in development.</p>
+        
+        <img src="../static/images/kban_about.png" alt="kanban" width="600px">
+
+        <p>Kanban—which comes from the Japanese word for “sign” or “Visual Board”—was developed by Toyota in the 1940s. It was originally a task management system to execute 
+            lean manufacturing. It was designed to improve the Toyota production system efficiency by limiting supplies and resources to what was 
+            needed for the immediate work items. Today, kanban boards are used in nearly every industry, most notably in software development.</p>
+
+        <h2>Benefits of using Kanban</h2>
+        <div class="list">
+            <ul>
+                <li>Helps to visualise your project workflow</li>
+                <li>Work is divided into smaller and more manageable tasks</li>
+                <li>Collects all relevant information needed for a task</li>
+                <li>Allows for focused and more efficient work</li>
+            </ul>
+        </div>
+        
+        <h2>Elements of a Kanban Board</h2>
+        <div class="list">
+            <ul>
+                <li><strong>Cards</strong>: Kanban cards live on the kanban board, and each one represents an individual task, also referred to as work items. 
+                    Each kanban card is filled with information related to that task, such as its name and a short description. </li>
+                <li><strong>Columns(or Lists)</strong>: Columns reside on the board and are a way to break up the different stages in the project workflow. Kanban cards 
+                    are organized under the column headings and are moved to the next column to the right to indicate where in the production cycle or workflow they are.</li>
+            </ul>
+        </div>
+
+        <h2>Putting it all together</h2>
+        <p>Let's put what we've learnt until now into practice. The simplest possible kanban board will usually have 3 columns: To Do, Doing and Done.
+            Something like this:
+            <img src="../static/images/kban_abt2.png" alt="" width="700px">
+            Now, remember that each card represents a task on the board. As progress is made on a card, it moves through the columns "To Do", "Doing" and finally
+            reaches "Done" which marks the completion of that task. At this point you can delete or archive it. 
+        </p>
+
+        <p class="link-style">
+            That was a lot of information! But it should be enough to get you started on creating and organizing your very own kanban boards. 
+            So head over to MiniKan and <a href="/register">get started!</a>
+        </p>
+
+        <p class="link-style">
+            <strong>Reference</strong>: <a href="https://www.projectmanager.com/guides/kanban">The ultimate guide to Kanban Methodology.</a>
+        </p>
+    </section>
+
+    <footer>
+        <h3>MiniKan &copy; 2022</h3>
+        <p>Made by Dakksh Vashisht</p>
+    </footer>
+    
+</body>
+</html>

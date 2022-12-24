@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>MiniKan</title>
+</head>
+<body>
+    <header>
+        <nav id="navbar">
+            <h1><a href="/">MiniKan</a></h1>
+            <ul>
+                <li><a href="/register">Register</a></li>
+                <li><a href="/login">Log In</a></li>
+                <li><a href="/about">Help & About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="features">
+        <img src="../static/images/kban_land.jpg" alt="Kanban" width="900px">
+        <h1 class="big-heading">Welcome To MiniKan</h1>
+        <p>MiniKan is a minimal, simple & easy to use Kanban Board that helps you organize things better.
+        It's completely free, open source & doesn't get in your way! So what are you waiting for?</p>
+        <a href="/register" class="btn">Get Started</a>
+    </section>
+    
+    <footer>
+        <h3>MiniKan &copy; 2022</h3>
+        <p>Made by Dakksh Vashisht</p>
+    </footer>
+</body>
+</html>

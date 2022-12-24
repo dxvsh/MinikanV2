@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='vue.js') }}"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <nav id="navbar">
+                <h1><a href="/">MiniKan</a></h1>
+                <ul>
+                    <li><a href="/register">Register</a></li>
+                    <li><a href="/login">Log In</a></li>
+                    <li><a href="/about">Help & About</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section id="main-form">
+            <h1 class="big-heading">Log In!</h1>
+            <form @submit="validate">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" v-model="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" v-model="password" required>
+                </div>
+                <p v-if="incorrectCredentials" class="error">Incorrect Username or Password entered.</p>
+                <button class="btn" type="submit">Log In</button>
+            </form>
+
+            <p class="link-style">
+                Don't have an account? <a href="/register">Sign up instead!</a>
+            </p>
+        </section>
+
+        <footer>
+            <h3>MiniKan &copy; 2022</h3>
+            <p>Made by Dakksh Vashisht</p>
+        </footer>
+    </div>
+
+</body>
+<script>
+    const app = new Vue({
+        el : '#app',
+        data : {
+            username : '',
+            password : '',
+            incorrectCredentials : false
+        },
+        methods : {
+            validate(e){
+                e.preventDefault() // prevent the default behavior of form submit and do our thing instead (as shown below:)
+
+                fetch('http://127.0.0.1:5000/api/login', {
+                    method : 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body : JSON.stringify({"username" : this.username, "password" : this.password})
+                }).then((res) => {
+                    // the api sends a 401 status code in case of incorrect credentials, we need to look out for that and not let the user proceed!
+                    if(res.status == 401){
+                        this.incorrectCredentials = true
+                        // the fetch promise resolves even in case of error (400-500) responses.
+                        // so we need to explicitly throw an error to prevent it from automatically resolving and reaching into the next .then block
+                        throw new Error("Incorrect Username or password.")
+                        // instead of throwing an error, we can also explicitly reject the promise like so:
+                        // return Promise.reject("Incorrect username or password")
+                    }
+                    else if(res.ok){
+                        return res.json() // login success!
+                    }
+                }).then((data) => {
+                    console.log(data);
+                    // user login was successful, so redirect the user to their dashboard.
+                    window.location.href = `http://127.0.0.1:5000/${this.username}/dashboard`
+                })
+                .catch((err) => console.log(err))
+            }
+        }
+    })
+</script>
+</html>
