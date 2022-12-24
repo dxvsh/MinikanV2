@@ -1,4 +1,4 @@
-# Minikan
+# MinikanV2
 Minikan is a simple and minimal Kanban webapp for managing and organizing your tasks. It helps to increase productivity by letting you visualizing your workflow.
 
 ## Features
@@ -33,19 +33,19 @@ This app consists of the following files:
 
 ```
 requirements.txt			# required packages for running the application
-README.md					# contains info and setup instructions for the app
-run.py						# runs the app
-flask_app/					# application package
-	__init__.py				# initializes the app, creates a Flask instance
-	api.py					# REST API for the application
-	views.py				# contains all the views for the app
-	models.py				# database models for the application
-	tasks.py				# code for periodic/scheduled tasks
+README.md				# contains info and setup instructions for the app
+run.py					# runs the app
+flask_app/				# application package
+	__init__.py			# initializes the app, creates a Flask instance
+	api.py				# REST API for the application
+	views.py			# contains all the views for the app
+	models.py			# database models for the application
+	tasks.py			# code for periodic/scheduled tasks
 	helper_funcs.py			# helper funcs for generating stats, pie charts, pdfs etc
 	kanban.sqlite3			# sqlite database for the app
-	.env					# environment variables
-	static/					# static files like css, js, images
-	templates/				# contains the html templates
+	.env				# environment variables
+	static/				# static files like css, js, images
+	templates/			# contains the html templates
 	user_uploads/			# stores the files uploaded by the user (eg. csv files)
 	user_reports/			# stores the pdf reports for users
 ```
