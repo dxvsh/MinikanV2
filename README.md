@@ -1,5 +1,6 @@
 # MinikanV2
 Minikan is a simple and minimal Kanban webapp for managing and organizing your tasks. It helps to increase productivity by letting you visualizing your workflow.
+Check out a video demo on [YouTube](https://www.youtube.com/watch?v=SXlGlq8kYJw)
 
 ## Features
 * CRUD operations on user lists and cards (create, update and delete cards and lists)
